@@ -4,9 +4,9 @@ from pathlib import Path
 
 # Dictionary mapping folder names to lists of file extensions
 FOLDER_MAP = {
-    "Images": [".jpg", ".jpeg", ".png", ".gif"],
+    "Images": [".jpg", ".jpeg", ".png", ],
     "Documents": [".pdf", ".doc", ".docx", ".txt"],
-    "Videos": [".mp4", ".mov", ".avi"],
+    "Videos": [".mp4", ".mov", ".avi",".gif"],
 }
 
 def setup_folders(directory: Path):
@@ -17,6 +17,7 @@ def setup_folders(directory: Path):
     for folder_name in FOLDER_MAP.keys():
         folder_path = directory / folder_name
         folder_path.mkdir(exist_ok=True)
+
     # Create a 'Misc' folder too
     (directory / "Misc").mkdir(exist_ok=True)
 
@@ -36,6 +37,11 @@ def organize_files(directory: Path):
     for file_path in directory.iterdir():
         # Skip directories (including the newly created ones)
         if file_path.is_dir():
+            continue
+
+        # Skip the organizer script itself
+        if file_path.name == "file_sorter.py":
+            print(f"Skipping {file_path.name} (the organizer script).")
             continue
 
         # Identify which folder this file should go in, based on extension
@@ -75,3 +81,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
