@@ -4,22 +4,32 @@ from pathlib import Path
 
 # Dictionary mapping folder names to lists of file extensions
 FOLDER_MAP = {
-    "Images": [".jpg", ".jpeg", ".png", ],
+    "Images": [".jpg", ".jpeg", ".png"],
     "Documents": [".pdf", ".doc", ".docx", ".txt"],
-    "Videos": [".mp4", ".mov", ".avi",".gif"],
+    "Videos": [".mp4", ".mov", ".avi", ".gif"],
 }
 
 def setup_folders(directory: Path):
     """
     Ensure that each folder in FOLDER_MAP exists under 'directory'.
     Also creates a 'Misc' folder for any uncategorized files.
+    Print a message indicating whether the folder was created or already exists.
     """
     for folder_name in FOLDER_MAP.keys():
         folder_path = directory / folder_name
-        folder_path.mkdir(exist_ok=True)
+        if folder_path.exists():
+            print(f"Folder '{folder_path.name}' already exists.")
+        else:
+            folder_path.mkdir(exist_ok=True)
+            print(f"Created folder '{folder_path.name}'.")
 
     # Create a 'Misc' folder too
-    (directory / "Misc").mkdir(exist_ok=True)
+    misc_folder = directory / "Misc"
+    if misc_folder.exists():
+        print(f"Folder '{misc_folder.name}' already exists.")
+    else:
+        misc_folder.mkdir(exist_ok=True)
+        print(f"Created folder '{misc_folder.name}'.")
 
 def organize_files(directory: Path):
     """
@@ -42,6 +52,11 @@ def organize_files(directory: Path):
         # Skip the organizer script itself
         if file_path.name == "file_sorter.py":
             print(f"Skipping {file_path.name} (the organizer script).")
+            continue
+
+        # Skip other files you don't want moved
+        if file_path.name == "requirements.txt":
+            print(f"Skipping {file_path.name} (requirements file).")
             continue
 
         # Identify which folder this file should go in, based on extension
@@ -81,4 +96,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
