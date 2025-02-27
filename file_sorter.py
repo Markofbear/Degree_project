@@ -98,8 +98,9 @@ def undo_last_action(log):
     messagebox.showinfo("Undo", "All actions have been undone.")
 
 def select_folder(entry_field):
-    """Open folder selection dialog and update entry field."""
-    folder_selected = filedialog.askdirectory()
+    """Open folder selection dialog starting from the script's directory and update entry field."""
+    initial_dir = Path(__file__).parent  # Get the directory where file_sorter.py is located
+    folder_selected = filedialog.askdirectory(initialdir=initial_dir)  # Open file dialog from this directory
     if folder_selected:
         entry_field.delete(0, tk.END)
         entry_field.insert(0, folder_selected)
